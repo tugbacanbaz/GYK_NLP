@@ -50,8 +50,9 @@ plt.show()
 
 def clean_text(text):
     text = text.lower()  #small case
+    text = re.sub(r"[^\x00-\x7F]+", "", text)  #remove non-ASCII characters
     text = re.sub(r"http\S+", "", text)  #remove URL
-    text = re.sub(r"\[.*?\]", "", text)  #remove [NAME]
+    text = re.sub(r"\[.*?\]", "", text)  #remove [NAME], [RELIGION]
     text = re.sub(r"@\w+", "", text)  #remove mention 
     text = re.sub(r"#\w+", "", text)  #remove hashtag 
     text = text.translate(str.maketrans("", "", string.punctuation))  #remove punctuation
@@ -62,3 +63,6 @@ def clean_text(text):
 
 df['clean_text'] = df['text'].apply(clean_text)
 print(df[['text', 'clean_text']].sample(5))
+
+#Save the cleaned DataFrame
+df.to_csv("data/dataset/goemotions_cleaned.csv", index=False)
