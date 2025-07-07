@@ -9,6 +9,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
+import pickle
 
 
 df = pd.read_csv('spam.csv', encoding='latin-1')
@@ -70,3 +71,10 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 model.summary()
 history = model.fit(X_train_padded, y_train, epochs=10, validation_data=(X_test_padded, y_test))
+
+#save the model
+model.save("sms_model.h5")
+#model.save("sms_model2.keras")
+
+with open('tokenizer.pkl', 'wb') as f:
+    pickle.dump(tokenizer, f)
